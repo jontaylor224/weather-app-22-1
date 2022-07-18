@@ -1,0 +1,9 @@
+GET https://api.weather.gov/points/39.7671755,-86.1591514
+
+###
+
+GET https://api.weather.gov/gridpoints/IND/57,68/forecast/hourly
+User-Agent: (DMG Weather App Demo, dmgregg@hey.com)
+Accept: application/ld+json
+
+###
