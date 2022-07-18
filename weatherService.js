@@ -11,21 +11,36 @@ const headers = new Headers({
     "Accept": "application/ld+json",
 })
 
-function getHourlyForecastByCoords(coords) {
-    return getGridPointURL(coords.latitude, coords.longitude)
-        .then(getHourlyForecast)
+function getWeeklyForecastByCoords(coords) {
+    return getWeeklyGridPointURL(coords.latitude, coords.longitude)
+        .then(getForecastPeriods)
 }
 
-function getGridPointURL (latitude, longitude) {
+function getHourlyForecastByCoords(coords) {
+    return getHourlyGridPointURL(coords.latitude, coords.longitude)
+        .then(getForecastPeriods)
+}
+
+function getWeeklyGridPointURL (latitude, longitude) {
+    return fetch(`${baseURL}/points/${latitude},${longitude}`, { headers })
+        .then(response => response.json())
+        .then(payload => payload.forecast)
+}
+
+function getHourlyGridPointURL (latitude, longitude) {
     return fetch(`${baseURL}/points/${latitude},${longitude}`, { headers })
         .then(response => response.json())
         .then(payload => payload.forecastHourly)
 }
 
-function getHourlyForecast (url) {
+function getForecastPeriods (url) {
     return fetch(url, { headers })
         .then(response => response.json())
-        .then(payload => payload.periods)
+        .then(payload => {
+            console.log(payload.periods)
+            return payload.periods
+        })
 }
 
-export { getHourlyForecastByCoords }
+
+export { getHourlyForecastByCoords, getWeeklyForecastByCoords }
