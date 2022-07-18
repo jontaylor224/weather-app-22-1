@@ -1,21 +1,32 @@
-import { getHourlyForecastByCoords } from "./weatherService.js"
-
 // 1. Get user's latitude & longitude coordinates.
 // 2. Send those coordinates to a weather API to retrieve weather data.
 
-const geolocationOptions = { enableHighAccuracy: true }
-navigator.geolocation.getCurrentPosition(onSuccess, onError, geolocationOptions)
+import { requestLocationPermission, guessCoordsByIPAddress } from "./locationService.js"
+import { getHourlyForecastByCoords } from "./weatherService.js"
+import { renderForecasts } from "./view.js"
+
+const mainElement = document.querySelector("main")
+
+requestLocationPermission(onSuccess, onError)
+
+
 
 function onSuccess(position) {
-    console.log(position.coords.latitude, position.coords.longitude)
-
-    getHourlyForecastByCoords(position.coords.latitude, position.coords.longitude)
-        .then(forecastPeriods => console.log(forecastPeriods[0]))
+    getHourlyForecastByCoords(position.coords)
+        .then(selectAndRenderForecasts)
 }
 
-function onError(error) {
-    console.warn(error)
+function onError(_error) {  // A variable beginning with an underscore is usually used as a convention to show a parameter which is available for use but is currently UNUSED.
+    console.warn(
+        new Error("User denied accurate geolocation. Guessing location by IP address...")
+    )
 
-    getHourlyForecastByCoords(41.881832, -87.623177)
-        .then(forecastPeriods => console.log(forecastPeriods[0]))
+    guessCoordsByIPAddress()
+        .then(getHourlyForecastByCoords)
+        .then(selectAndRenderForecasts)
+}
+
+function selectAndRenderForecasts (forecastPeriods) {
+    const selectedForecasts = forecastPeriods.slice(0, 6)
+    renderForecasts(selectedForecasts, mainElement)
 }

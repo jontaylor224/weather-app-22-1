@@ -1,0 +1,16 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.weather-card {
+    border: 1px solid black;
+    max-width: 20vw;
+    padding: 1rem;
+    font-size: 1.5rem;
+    margin: 1rem;
+}
+
+main {
+    display: flex;
+}

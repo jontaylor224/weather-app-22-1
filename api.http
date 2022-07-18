@@ -7,3 +7,7 @@ User-Agent: (DMG Weather App Demo, dmgregg@hey.com)
 Accept: application/ld+json
 
 ###
+
+GET https://hutils.loxal.net/whois
+
+###

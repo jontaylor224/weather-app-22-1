@@ -1,18 +1,18 @@
 // GET https://api.weather.gov/points/39.7671755,-86.1591514
 // NEXT ENDPOINT TO HIT: payload.forecastHourly 
 // EXAMPLE: GET https://api.weather.gov/gridpoints/IND/57,68/forecast/hourly
-//          User-Agent: Current Weather: David Michael Gregg <david@kenzie.academy>
+//          User-Agent: Today's Weather: David Michael Gregg <david@kenzie.academy>
 //          Accept: application/ld+json
 // HOURLY FORECAST DATA: payload.periods (array)
 
 const baseURL = "https://api.weather.gov"
 const headers = new Headers({
-    "User-Agent": "Current Weather: David Michael Gregg <david@kenzie.academy>",
+    "User-Agent": "Today's Weather: David Michael Gregg <david@kenzie.academy>",
     "Accept": "application/ld+json",
 })
 
-function getHourlyForecastByCoords(latitude, longitude) {
-    return getGridPointURL(latitude, longitude)
+function getHourlyForecastByCoords(coords) {
+    return getGridPointURL(coords.latitude, coords.longitude)
         .then(getHourlyForecast)
 }
 
