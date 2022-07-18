@@ -1,27 +1,31 @@
 // GET https://api.weather.gov/points/39.7671755,-86.1591514
-// NEXT ENDPOINT TO HIT: payload.properties.forecastHourly 
+// NEXT ENDPOINT TO HIT: payload.forecastHourly 
 // EXAMPLE: GET https://api.weather.gov/gridpoints/IND/57,68/forecast/hourly
-//          User-Agent: (DMG Weather App Demo, dmgregg@hey.com)
+//          User-Agent: Current Weather: David Michael Gregg <david@kenzie.academy>
 //          Accept: application/ld+json
-// HOURLY FORECAST DATA: payload.properties.periods (array)
+// HOURLY FORECAST DATA: payload.periods (array)
 
 const baseURL = "https://api.weather.gov"
-
-function getGridPointURL (latitude, longitude) {
-    return fetch(`${baseURL}/points/${latitude},${longitude}`)
-        .then(response => response.json())
-        .then(payload => payload.properties.forecastHourly)
-}
-
-function getHourlyForecastByURL (url) {
-    return fetch(url)
-        .then(response => response.json())
-        .then(payload => payload.properties.periods)
-}
+const headers = new Headers({
+    "User-Agent": "Current Weather: David Michael Gregg <david@kenzie.academy>",
+    "Accept": "application/ld+json",
+})
 
 function getHourlyForecastByCoords(latitude, longitude) {
     return getGridPointURL(latitude, longitude)
-        .then(getHourlyForecastByURL)
+        .then(getHourlyForecast)
+}
+
+function getGridPointURL (latitude, longitude) {
+    return fetch(`${baseURL}/points/${latitude},${longitude}`, { headers })
+        .then(response => response.json())
+        .then(payload => payload.forecastHourly)
+}
+
+function getHourlyForecast (url) {
+    return fetch(url, { headers })
+        .then(response => response.json())
+        .then(payload => payload.periods)
 }
 
 export { getHourlyForecastByCoords }
